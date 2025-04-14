@@ -1,4 +1,5 @@
 using Domain.Contracts.Repositories;
+using Domain.Entities;
 using Infrastructure.Data.Repositories;
 using Infrastructure.Data.Schema;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,9 @@ public static class ServiceCollectionExtensions
             );
 
         services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<ITaskRepository, TaskRepository>();
+        services.AddTransient<ITaskCompletionRepository, TaskCompletionRepository>();
+        
         return services;
     }
 }

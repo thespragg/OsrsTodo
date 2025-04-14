@@ -16,6 +16,7 @@ public static class WebApplicationExtensions
 
         webApplication.MapGet("status", () => true).RequireAuthorization();
         webApplication.UseSecurityHeaders();
+        
         webApplication.MapAccountEndpoints();
 
         if (!webApplication.Environment.IsDevelopment())
