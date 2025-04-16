@@ -14,6 +14,16 @@ builder
     .AddDataInfrastructure(builder.Configuration.GetConnectionString("DefaultDatabase")!)
     .AddDomain();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
@@ -30,6 +40,8 @@ builder.Services.AddRateLimiter(options =>
 
 var app = builder
     .Build();
+
+app.UseCors(); 
 
 app.UseHttpInterface();
 app.UseHttpsRedirection();
