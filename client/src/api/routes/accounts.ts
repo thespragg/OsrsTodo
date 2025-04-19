@@ -1,19 +1,11 @@
-import { type AccessToken } from '@/types/accessToken'
+import type { Account } from '@/types/account'
+import type { IHttp } from '../http'
 import { Route } from '../route'
-import { type IHttp } from '../http'
 
-export class AccountsRoute extends Route {
+export class AccountRoute extends Route {
   constructor(http: IHttp) {
     super(http)
   }
 
-  login = async (loginRequest: { username: string; password: string }): Promise<AccessToken> =>
-    await this._http.post<any, AccessToken>(`/accounts/login`, loginRequest)
-
-  register = async (registerRequest: {
-    username: string
-    email: string
-    password: string
-  }): Promise<AccessToken> =>
-    await this._http.post<any, AccessToken>(`/accounts/register`, registerRequest)
+  get = async (): Promise<Account[]> => await this._http.get(`/accounts`)
 }

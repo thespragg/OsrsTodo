@@ -30,12 +30,14 @@ public static class ServiceCollectionExtensions
                                 null
                             )
                         )
+                        .UseSnakeCaseNamingConvention()
             );
 
         services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<IAccountRepo, AccountRepo>();
         services.AddTransient<ITaskRepository, TaskRepository>();
         services.AddTransient<ITaskCompletionRepository, TaskCompletionRepository>();
-        
+
         return services;
     }
 }

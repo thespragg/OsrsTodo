@@ -1,5 +1,5 @@
 import { api } from '@/api'
-import type { AccessToken } from '@/types/accessToken'
+import type { AccessToken } from '@/types'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -13,7 +13,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const login = async (loginRequest: { username: string; password: string }) => {
     try {
-      const response = await api.accounts().login(loginRequest)
+      const response = await api.user().login(loginRequest)
       setToken(response)
       return response
     } catch (error) {
@@ -24,7 +24,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const register = async (register: { username: string; email: string; password: string }) => {
     try {
-      const response = await api.accounts().register(register)
+      const response = await api.user().register(register)
       return response
     } catch (error) {
       throw error

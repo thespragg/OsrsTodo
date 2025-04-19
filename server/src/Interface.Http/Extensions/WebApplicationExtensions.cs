@@ -1,5 +1,6 @@
 using Interface.Http.Middleware;
-using Interface.Http.Routes.Account;
+using Interface.Http.Routes.Accounts;
+using Interface.Http.Routes.User;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 
@@ -17,6 +18,7 @@ public static class WebApplicationExtensions
         webApplication.MapGet("status", () => true).RequireAuthorization();
         webApplication.UseSecurityHeaders();
         
+        webApplication.MapUserEndpoints();
         webApplication.MapAccountEndpoints();
 
         if (!webApplication.Environment.IsDevelopment())

@@ -1,4 +1,10 @@
-import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
+import axios, {
+  type AxiosInstance,
+  type AxiosRequestConfig,
+  type AxiosRequestHeaders,
+  type AxiosResponse,
+  type InternalAxiosRequestConfig,
+} from 'axios'
 
 export interface IHttp {
   request<T = any, R = T>(config: AxiosRequestConfig): Promise<R>
@@ -37,6 +43,19 @@ export class Http implements IHttp {
         'X-Requested-With': 'XMLHttpRequest',
       },
     })
+
+    inst.interceptors.request.use(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      async (config: InternalAxiosRequestConfig<any>) => {
+        this.token = localStorage.getItem('accessToken') ?? undefined
+        if (!config.headers) config.headers = {} as AxiosRequestHeaders
+        config.headers.Authorization = `Bearer ${this.token}`
+        return config
+      },
+      async (error) => {
+        return await Promise.reject(error)
+      },
+    )
 
     this.addResponseTranslator(inst)
 

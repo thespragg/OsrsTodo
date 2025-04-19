@@ -11,5 +11,7 @@ public class UserEntity
     public required string PasswordSalt { get; init; }
     public Role Role { get; init; } = Role.User;
     public DateTime? LastLoginAt { get; init; }
-    public int FailedLoginAttempts { get; init; } = 0;
+    public int FailedLoginAttempts { get; init; }
+    public IEnumerable<AccountEntity> Accounts { get; init; } = [];
+
 }

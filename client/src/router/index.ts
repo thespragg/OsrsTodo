@@ -3,6 +3,7 @@ import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import { authGuard } from './guards/authGuard'
+import { hydrationGuard } from './guards/hydrationGuard'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,5 +30,6 @@ const router = createRouter({
 })
 
 router.beforeEach(authGuard)
+router.beforeEach(hydrationGuard)
 
 export default router

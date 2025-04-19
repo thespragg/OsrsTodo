@@ -5,7 +5,7 @@ namespace Infrastructure.Data.Contracts;
 
 internal interface IEntityMapperBase<TSource, TDestination>
 {
-    Mapper Create();
+    void ApplyTo(IMapperConfigurationExpression expression);
     Expression<Func<TSource, TDestination>> ToEntityExpression();
     Expression<Func<TDestination, TSource>> ToRecordExpression();
 }
@@ -16,17 +16,17 @@ internal interface IEntityMapper<TSource, TDestination> : IEntityMapperBase<TSou
 
 internal abstract class EntityMapperBase<TSource, TDestination> : IEntityMapper<TSource, TDestination>
 {
-    public abstract Mapper Create();
+    public abstract void ApplyTo(IMapperConfigurationExpression expression);
 
     public Expression<Func<TSource, TDestination>> ToEntityExpression()
     {
-        var mapper = Create();
+        var mapper = new Mapper(new MapperConfiguration(ApplyTo));
         return dataModel => mapper.Map<TDestination>(dataModel);
     }
 
     public Expression<Func<TDestination, TSource>> ToRecordExpression()
     {
-        var mapper = Create();
+        var mapper = new Mapper(new MapperConfiguration(ApplyTo));
         return dataModel => mapper.Map<TSource>(dataModel);
     }
 }

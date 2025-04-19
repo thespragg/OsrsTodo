@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+using Functional.Sharp.Errors;
 using Functional.Sharp.Monads;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -32,6 +34,34 @@ internal static class ResultExtensions
             val => TypedResults.Ok<T>(val),
             err => TypedResults.Problem(err.Message)
         );
+
+    private static readonly ReadOnlyDictionary<Type, int> DefaultErrorMappings = new(new Dictionary<Type, int>
+    {
+        { typeof(NotFoundError), 404 }
+    });
+
+    private static ProblemHttpResult DefaultErrorMapper(Error error)
+        => TypedResults.Problem(
+            title: error.Message,
+            statusCode: DefaultErrorMappings.GetValueOrDefault(error.GetType(), 500));
+
+
+    public static Results<TSuccess, ProblemHttpResult> MatchToHttp<TValue, TSuccess>(
+        this Result<TValue> result,
+        Func<TValue, TSuccess> map)
+        where TSuccess : IResult
+        => result.Match<Results<TSuccess, ProblemHttpResult>>(
+            value => map(value),
+            err => DefaultErrorMapper(err));
+    
+    public static async Task<Results<TSuccess, ProblemHttpResult>> MatchToHttp<TValue, TSuccess>(
+        this Task<Result<TValue>> result,
+        Func<TValue, TSuccess> map)
+        where TSuccess : IResult
+        => (await result).Match<Results<TSuccess, ProblemHttpResult>>(
+            value => map(value),
+            err => DefaultErrorMapper(err));
+
 
     internal static Results<Ok<TDestination>, ProblemHttpResult> ToHttpResult<TSource, TDestination>(
         this Result<TSource> result,

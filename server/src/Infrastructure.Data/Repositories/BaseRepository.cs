@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using AutoMapper;
 using AutoMapper.Extensions.ExpressionMapping;
 using Domain.Contracts;
 using Domain.Contracts.Repositories;
@@ -29,7 +30,7 @@ internal abstract class BaseRepository<TSource, TEntity, TMapper>(
         CancellationToken cancellationToken
     ) => await Try.ExecuteAsync<Result<TEntity>>(async () =>
     {
-        var mapper = _mapper.Create();
+        var mapper = new Mapper(new MapperConfiguration(_mapper.ApplyTo));
         var mappedPredicate = mapper.MapExpression<Expression<Func<TSource, bool>>>(predicate);
         var toEntityExpression = _mapper.ToEntityExpression();
 
@@ -50,7 +51,7 @@ internal abstract class BaseRepository<TSource, TEntity, TMapper>(
         CancellationToken cancellationToken
     ) => await Try.ExecuteAsync<Result<TEntity>>(async () =>
     {
-        var mapper = _mapper.Create();
+        var mapper = new Mapper(new MapperConfiguration(_mapper.ApplyTo));
         var mappedPredicate = mapper.MapExpression<Expression<Func<TSource, bool>>>(predicate);
         var toEntityExpression = _mapper.ToEntityExpression();
 
@@ -75,7 +76,7 @@ internal abstract class BaseRepository<TSource, TEntity, TMapper>(
         CancellationToken cancellationToken
     ) => await Try.ExecuteAsync(async () =>
     {
-        var mapper = _mapper.Create();
+        var mapper = new Mapper(new MapperConfiguration(_mapper.ApplyTo));
         var mappedPredicate = mapper.MapExpression<Expression<Func<TSource, bool>>>(predicate);
         var toEntityExpression = _mapper.ToEntityExpression();
 
@@ -94,7 +95,7 @@ internal abstract class BaseRepository<TSource, TEntity, TMapper>(
         CancellationToken cancellationToken
     ) => await Try.ExecuteAsync(async () =>
     {
-        var mapper = _mapper.Create();
+        var mapper = new Mapper(new MapperConfiguration(_mapper.ApplyTo));
         var mappedPredicate = mapper.MapExpression<Expression<Func<TSource, bool>>>(predicate);
         var toEntityExpression = _mapper.ToEntityExpression();
 
@@ -118,7 +119,7 @@ internal abstract class BaseRepository<TSource, TEntity, TMapper>(
         CancellationToken cancellationToken = default
     ) => await Try.ExecuteAsync(async () =>
     {
-        var mapper = _mapper.Create();
+        var mapper = new Mapper(new MapperConfiguration(_mapper.ApplyTo));
         var mappedPredicate = mapper.MapExpression<Expression<Func<TSource, TKey>>>(keySelector);
 
         var toRecordExpression = _mapper.ToRecordExpression().Compile();

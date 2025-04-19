@@ -11,7 +11,9 @@ internal sealed class OsrsTodoDbContext(
 ) : DbContext(options)
 {
     public DbSet<UserDataModel> Users { get; init; } = null!;
+    public DbSet<AccountDataModel> Accounts { get; init; } = null!;
     public DbSet<TaskDataModel> Tasks { get; init; } = null!;
+    public DbSet<TaskCompletionDataModel> TaskCompletions { get; init; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder
@@ -29,8 +31,22 @@ internal sealed class OsrsTodoDbContext(
                 user
                     .Property(x => x.Id)
                     .HasValueGenerator<GuidValueGenerator>();
+
+                user
+                    .HasMany(x => x.Accounts)
+                    .WithOne()
+                    .HasForeignKey(x => x.UserId);
             });
 
+        modelBuilder.Entity<AccountDataModel>(account =>
+        {
+            account
+                .Property(x => x.Id)
+                .HasValueGenerator<GuidValueGenerator>();
+            
+            account.HasKey(x => x.Id);
+        });
+        
         modelBuilder
             .Entity<TaskDataModel>(task =>
             {

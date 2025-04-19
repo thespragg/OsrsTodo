@@ -1,4 +1,7 @@
+using Domain.Contracts;
+using Interface.Http.Interfaces;
 using Interface.Http.Middleware;
+using Interface.Http.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,5 +12,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddHttpInterface(
         this IServiceCollection services,
         IConfiguration configuration
-    ) => services.AddAuthMiddleware(configuration);
+    ) => services
+        .AddHttpContextAccessor()
+        .AddAuthMiddleware(configuration)
+        .AddScoped<ICurrentUserService, CurrentUserService>();
 }

@@ -13,4 +13,5 @@ internal sealed class UserDataModel
     public Role Role { get; init; } = Role.User;
     public DateTime? LastLoginAt { get; init; }
     public int FailedLoginAttempts { get; init; }
+    public ICollection<AccountDataModel> Accounts { get; set; } = [];
 }

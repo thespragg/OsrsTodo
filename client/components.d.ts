@@ -10,10 +10,20 @@ declare module 'vue' {
     Button: typeof import('primevue/button')['default']
     Card: typeof import('primevue/card')['default']
     Checkbox: typeof import('primevue/checkbox')['default']
+    ChoreItem: typeof import('./src/components/ChoreItem.vue')['default']
+    Dialog: typeof import('primevue/dialog')['default']
+    Dropdown: typeof import('primevue/dropdown')['default']
+    Heatmap: typeof import('./src/components/Heatmap.vue')['default']
     InputText: typeof import('primevue/inputtext')['default']
+    ItemCounter: typeof import('./src/components/ItemCounter.vue')['default']
     Password: typeof import('primevue/password')['default']
+    ProgressBar: typeof import('primevue/progressbar')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Toast: typeof import('primevue/toast')['default']
+    TodoItem: typeof import('./src/components/TodoItem.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    Tooltip: typeof import('primevue/tooltip')['default']
   }
 }

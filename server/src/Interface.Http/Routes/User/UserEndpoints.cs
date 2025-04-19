@@ -1,14 +1,14 @@
 using Interface.Http.Extensions;
-using Interface.Http.Routes.Account.Handlers;
+using Interface.Http.Routes.User.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 
-namespace Interface.Http.Routes.Account;
+namespace Interface.Http.Routes.User;
 
-internal static class AccountEndpoints
+internal static class UserEndpoints
 {
-    internal static IEndpointRouteBuilder MapAccountEndpoints(this IEndpointRouteBuilder routes)
-        => routes.MapGroup("accounts", "Accounts", group =>
+    internal static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder routes)
+        => routes.MapGroup("user", "User", group =>
         {
             group.MapPost("login", LoginHandler.Handle).AllowAnonymous();
             group.MapPost("register", RegisterHandler.Handle).AllowAnonymous();
