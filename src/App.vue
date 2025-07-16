@@ -1,25 +1,22 @@
 <template>
-  <div id="app">
-    <RouterView />
+  <div class="w-full">
+    <router-view></router-view>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { RouterView } from 'vue-router'
-import { useAuth } from '@/composables/useAuth'
+import { onMounted, ref } from 'vue'
+import { supabase } from '@/lib/supabase'
 
-const { initializeAuth } = useAuth()
+const session = ref()
 
 onMounted(() => {
-  initializeAuth()
+  supabase.auth.getSession().then(({ data }) => {
+    session.value = data.session
+  })
+
+  supabase.auth.onAuthStateChange((_, _session) => {
+    session.value = _session
+  })
 })
 </script>
-
-<style scoped>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-</style>

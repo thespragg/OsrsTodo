@@ -1,6 +1,5 @@
-// src/router/index.ts
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuth } from '@/composables/useAuth'
+import { supabase } from '@/lib/supabase'
 
 const router = createRouter({
   history: createWebHistory('/OsrsTodo/'),
@@ -9,41 +8,35 @@ const router = createRouter({
       path: '/',
       name: 'dashboard',
       component: () => import('@/views/DashboardView.vue'),
-      meta: { requiresAuth: true, requiresUsername: true },
+      meta: { requiresAuth: true },
     },
     {
       path: '/login',
       name: 'login',
       component: () => import('@/views/LoginView.vue'),
+      meta: { requiresAuth: false },
     },
     {
-      path: '/register-user',
-      name: 'register-user',
-      component: () => import('@/views/RegisterUserView.vue'),
-      meta: { requiresAuth: true },
+      path: '/register',
+      name: 'register',
+      component: () => import('@/views/RegisterView.vue'),
+      meta: { requiresAuth: false },
+    },
+    {
+      path: '/forgot-password',
+      name: 'forgot-password',
+      component: () => import('@/views/ForgottenPasswordView.vue'),
+      meta: { requiresAuth: false },
     },
   ],
 })
 
 router.beforeEach(async (to, _from, next) => {
-  const { isAuthenticated, hasUsername, initializeAuth } = useAuth()
-
-  if (!isAuthenticated.value) {
-    await initializeAuth()
-  }
-
-  if (to.meta['requiresAuth'] && !isAuthenticated.value) {
-    next('/login')
-  } else if (to.meta['requiresUsername'] && !hasUsername.value) {
-    next('/register-user')
-  } else if (to.name === 'login' && isAuthenticated.value) {
-    if (hasUsername.value) {
-      next('/')
-    } else {
-      next('/register-user')
-    }
+  const user = await supabase.auth.getUser()
+  if (!to.meta['requiresAuth'] || user.data.user !== null) {
+    return next()
   } else {
-    next()
+    return next({ name: 'login' })
   }
 })
 
